@@ -14,6 +14,7 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    // TODO: Implement likes
     date:{
         type:Date,
         default:Date.now
