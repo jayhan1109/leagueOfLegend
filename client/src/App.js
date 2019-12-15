@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useEffect } from "react";
+import { Route,Switch } from "react-router-dom";
+import Landing from "./components/layout/Landing";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import NavbarTop from "./components/layout/NavbarTop";
+import "./App.css";
+import AlertComponent from "./components/layout/AlertComponent";
+import { Container } from "react-bootstrap";
+import setAuthToken from "./utils/setAuthToken";
+import {store} from './index'
+import{loadUser} from './reducers/auth';
+import LeaderBoard from "./components/pages/LeaderBoard";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+if(localStorage.token){
+  setAuthToken(localStorage.token);
 }
+
+const App = () => {
+
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, [])
+
+  return (
+    <Fragment>
+      <NavbarTop />
+      <Route exact path="/" component={Landing} />
+      <Container>
+      <AlertComponent />
+      <Switch>
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/leaderboard" component={LeaderBoard} />
+        </Switch>
+
+      </Container>
+    </Fragment>
+  );
+};
 
 export default App;
